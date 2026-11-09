@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,7 +17,8 @@ func TestManagerServer(t *testing.T) {
 		name string
 		url  string
 	}{
-		{"Home Page", server.URL},
+		{"Home Page", fmt.Sprintf("%v/home", server.URL)},
+		{"View All Devices", fmt.Sprintf("%v/view/device/none", server.URL)},
 	}
 
 	for _, tc := range testCases {
@@ -27,8 +29,6 @@ func TestManagerServer(t *testing.T) {
 			if want != got {
 				t.Errorf("\nWant: %v\nGot: %v", want, got)
 			}
-
 		})
 	}
-
 }
