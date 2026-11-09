@@ -1,9 +1,9 @@
 package main
 
 import (
-	"testing"
 	"net/http"
 	"net/http/httptest"
+	"testing"
 )
 
 func TestManagerServer(t *testing.T) {
@@ -12,14 +12,23 @@ func TestManagerServer(t *testing.T) {
 
 	client := server.Client()
 
-	t.Run("Test Server Basics", func(t *testing.T) {
-		url := server.URL
-		response, _ := client.Get(url)
-		want := http.StatusOK
-		got := response.StatusCode
-		if want != got {
-			t.Errorf("\nWant: %v\nGot: %v", want, got)
-		}
+	testCases := []struct {
+		name string
+		url  string
+	}{
+		{"Home Page", server.URL},
+	}
 
-	})
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			response, _ := client.Get(tc.url)
+			want := http.StatusOK
+			got := response.StatusCode
+			if want != got {
+				t.Errorf("\nWant: %v\nGot: %v", want, got)
+			}
+
+		})
+	}
+
 }
