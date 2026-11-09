@@ -10,3 +10,7 @@ func HandleMain(w http.ResponseWriter, r *http.Request) {
 	template, _ := template.ParseFiles("templates/home.html")
 	template.Execute(w, nil)
 }
+
+func HandleViewDevicesAll(w http.ResponseWriter, r *http.Request) {
+
+}
