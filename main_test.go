@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,8 +16,8 @@ func TestManagerServer(t *testing.T) {
 		name string
 		url  string
 	}{
-		{"Home Page", fmt.Sprintf("%v/home", server.URL)},
-		{"View All Devices", fmt.Sprintf("%v/view/device/none", server.URL)},
+		{"Home Page", server.URL + "/home"},
+		{"View All Devices", server.URL + "/view/device/all"},
 	}
 
 	for _, tc := range testCases {

@@ -9,6 +9,7 @@ type ManagerHostServer struct {
 func NewManagerHostServer() (server *ManagerHostServer) {
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
 	server.HandleFunc("/home", HandleMain)
+	server.HandleFunc("/view/device/all", HandleViewDevicesAll)
 	return
 }
 
