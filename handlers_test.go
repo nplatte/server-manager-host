@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nplatte/server-manager-host.git/stores"
 	testhelpers "github.com/nplatte/server-manager-host.git/test_helpers"
 )
 
@@ -26,13 +27,13 @@ func TestHomeHandler(t *testing.T) {
 func TestViewDevicesEndpoint(t *testing.T) {
 	// the view devices endpoint takes a GET request and returns a list of device names, IP addresses, and a list of services
 	testCases := []struct {
-		name  string
-		count int
+		name    string
+		devices []stores.Device
 	}{
-		{"Base Case", 0},
+		{"Base Case", []stores.Device{}},
 	}
 	for _, tc := range testCases {
-		for i := range tc.count {
+		for i := range len(tc.devices) {
 			i = i
 		}
 		t.Run(tc.name, func(t *testing.T) {
@@ -43,8 +44,8 @@ func TestViewDevicesEndpoint(t *testing.T) {
 
 			jsonData := testhelpers.GetJSONFromResponse(t, response.Body)
 
-			if len(jsonData) != tc.count {
-				t.Errorf("\nWant: %v\nGot: %v", tc.count, len(jsonData))
+			if len(jsonData) != len(tc.devices) {
+				t.Errorf("\nWant: %v\nGot: %v", len(tc.devices), len(jsonData))
 			}
 		})
 	}
