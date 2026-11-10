@@ -1,11 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	testhelpers "github.com/nplatte/server-manager-host.git/test_helpers"
 )
 
 func TestHomeHandler(t *testing.T) {
@@ -40,12 +41,7 @@ func TestViewDevicesEndpoint(t *testing.T) {
 
 			HandleViewDevicesAll(response, request)
 
-			var jsonData []string
-			err := json.NewDecoder(response.Body).Decode(&jsonData)
-
-			if err != nil {
-				t.Fatalf("\nUnable to parse response from server %q \ninto slice of JSON, \n'%v'", response.Body, err)
-			}
+			jsonData := testhelpers.GetJSONFromResponse(t, response.Body)
 
 			if len(jsonData) != tc.count {
 				t.Errorf("\nWant: %v\nGot: %v", tc.count, len(jsonData))
