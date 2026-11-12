@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/nplatte/server-manager-host.git/handlers"
+	"github.com/nplatte/server-manager-host/handlers"
 )
 
 type ManagerHostServer struct {

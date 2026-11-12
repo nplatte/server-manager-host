@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nplatte/server-manager-host.git/stores"
-	testhelpers "github.com/nplatte/server-manager-host.git/test_helpers"
+	"github.com/nplatte/server-manager-host/stores"
+	testhelpers "github.com/nplatte/server-manager-host/test_helpers"
 )
 
 func TestHomeHandler(t *testing.T) {

@@ -3,7 +3,7 @@ package stores
 import (
 	"testing"
 
-	testhelpers "github.com/nplatte/server-manager-host.git/test_helpers"
+	testhelpers "github.com/nplatte/server-manager-host/test_helpers"
 )
 
 func TestStoreAdd(t *testing.T) {

@@ -1,3 +1,3 @@
-module github.com/nplatte/server-manager-host.git
+module github.com/nplatte/server-manager-host
 
 go 1.27.3

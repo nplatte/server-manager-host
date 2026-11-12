@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/nplatte/server-manager-host.git/ui"
+	"github.com/nplatte/server-manager-host/ui"
 )
 
 func HandleMain(w http.ResponseWriter, r *http.Request) {
