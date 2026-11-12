@@ -25,5 +25,5 @@ func NewAllDevicesHandler(store stores.DeviceStore) *AllDevicesHandler {
 
 func (h *AllDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
-	encoder.Encode([]string{})
+	encoder.Encode(h.store.GetDevices())
 }

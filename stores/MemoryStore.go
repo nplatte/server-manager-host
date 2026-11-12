@@ -14,7 +14,7 @@ func (s *MemoryDeviceStore) GetDevices() []Device {
 }
 
 func (s *MemoryDeviceStore) AddDevice(name string, ip string) error {
-	new := Device{name: name, ip: ip, services: []string{}}
+	new := Device{Name: name, IP: ip, Services: []string{}}
 	s.devices = append(s.devices, new)
 	return nil
 }

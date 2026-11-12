@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"github.com/nplatte/server-manager-host/stores"
-	"github.com/nplatte/server-manager-host/testhelpers"
 )
 
 func TestHomeHandler(t *testing.T) {
@@ -31,6 +32,13 @@ func TestViewDevicesEndpoint(t *testing.T) {
 		devices [][]string
 	}{
 		{"Base Case", [][]string{}},
+		{"One Device", [][]string{
+			{"Linux", "the IP"},
+		}},
+		{"Two Devices", [][]string{
+			{"Linux", "the IP"},
+			{"Windows", "New IP"},
+		}},
 	}
 	for _, tc := range testCases {
 		store := stores.NewMemoryStore()
@@ -44,11 +52,21 @@ func TestViewDevicesEndpoint(t *testing.T) {
 
 			handler.ServeHTTP(response, request)
 
-			jsonData := testhelpers.GetJSONFromResponse(t, response.Body)
+			jsonData := GetDeviceJSONFromResponse(t, response.Body)
 
 			if len(jsonData) != len(tc.devices) {
 				t.Errorf("\nWant: %v\nGot: %v", len(tc.devices), len(jsonData))
 			}
 		})
 	}
+}
+
+func GetDeviceJSONFromResponse(t *testing.T, body io.Reader) (jsonData []stores.Device) {
+	t.Helper()
+	err := json.NewDecoder(body).Decode(&jsonData)
+
+	if err != nil {
+		t.Fatalf("\nUnable to parse response from server %q \ninto slice of JSON, \n'%v'", body, err)
+	}
+	return
 }

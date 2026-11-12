@@ -6,7 +6,7 @@ type DeviceStore interface {
 }
 
 type Device struct {
-	name     string
-	ip       string
-	services []string
+	Name     string
+	IP       string
+	Services []string
 }
