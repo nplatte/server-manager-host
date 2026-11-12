@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/nplatte/server-manager-host/handlers"
+	"github.com/nplatte/server-manager-host/stores"
 )
 
 type ManagerHostServer struct {
@@ -11,9 +12,10 @@ type ManagerHostServer struct {
 }
 
 func NewManagerHostServer() (server *ManagerHostServer) {
+	store := stores.NewMemoryStore()
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
 	server.HandleFunc("/home", handlers.HandleMain)
-	server.HandleFunc("/view/device/all", handlers.HandleViewDevicesAll)
+	server.Handle("/view/device/all", handlers.NewAllDevicesHandler(store))
 	return
 }
 

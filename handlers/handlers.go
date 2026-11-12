@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"text/template"
 
+	"github.com/nplatte/server-manager-host/stores"
 	"github.com/nplatte/server-manager-host/ui"
 )
 
@@ -14,7 +15,15 @@ func HandleMain(w http.ResponseWriter, r *http.Request) {
 	template.Execute(w, nil)
 }
 
-func HandleViewDevicesAll(w http.ResponseWriter, r *http.Request) {
+type AllDevicesHandler struct {
+	store stores.DeviceStore
+}
+
+func NewAllDevicesHandler(store stores.DeviceStore) *AllDevicesHandler {
+	return &AllDevicesHandler{store: store}
+}
+
+func (h *AllDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 	encoder.Encode([]string{})
 }

@@ -28,19 +28,21 @@ func TestViewDevicesEndpoint(t *testing.T) {
 	// the view devices endpoint takes a GET request and returns a list of device names, IP addresses, and a list of services
 	testCases := []struct {
 		name    string
-		devices []stores.Device
+		devices [][]string
 	}{
-		{"Base Case", []stores.Device{}},
+		{"Base Case", [][]string{}},
 	}
 	for _, tc := range testCases {
-		for i := range len(tc.devices) {
-			i = i
+		store := stores.NewMemoryStore()
+		handler := NewAllDevicesHandler(store)
+		for _, device := range tc.devices {
+			store.AddDevice(device[0], device[1])
 		}
 		t.Run(tc.name, func(t *testing.T) {
 			request := httptest.NewRequest(http.MethodGet, "/view/device/all", nil)
 			response := httptest.NewRecorder()
 
-			HandleViewDevicesAll(response, request)
+			handler.ServeHTTP(response, request)
 
 			jsonData := testhelpers.GetJSONFromResponse(t, response.Body)
 
