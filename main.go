@@ -1,6 +1,10 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/nplatte/server-manager-host.git/handlers"
+)
 
 type ManagerHostServer struct {
 	*http.ServeMux
@@ -8,8 +12,8 @@ type ManagerHostServer struct {
 
 func NewManagerHostServer() (server *ManagerHostServer) {
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
-	server.HandleFunc("/home", HandleMain)
-	server.HandleFunc("/view/device/all", HandleViewDevicesAll)
+	server.HandleFunc("/home", handlers.HandleMain)
+	server.HandleFunc("/view/device/all", handlers.HandleViewDevicesAll)
 	return
 }
 

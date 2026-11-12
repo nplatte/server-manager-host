@@ -1,14 +1,16 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
 	"text/template"
+
+	"github.com/nplatte/server-manager-host.git/ui"
 )
 
 func HandleMain(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	template, _ := template.ParseFiles("templates/home.html")
+	template := template.Must(template.ParseFS(ui.Files, "html/home.html"))
 	template.Execute(w, nil)
 }
 
