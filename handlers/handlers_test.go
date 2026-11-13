@@ -25,7 +25,19 @@ func TestHomeHandler(t *testing.T) {
 	})
 }
 
-func TestAddDeviceHandler(t *testing.T) {
+func TestAddDeviceHandlerGET(t *testing.T) {
+	handler := NewCreateDeviceHandler(stores.NewMemoryStore())
+	t.Run("Test GET returns status 200", func(t *testing.T) {
+		request := httptest.NewRequest(http.MethodGet, "/create/device", nil)
+		response := httptest.NewRecorder()
+
+		handler.ServeHTTP(response, request)
+
+		testhelpers.AssertEqual(t, http.StatusOK, response.Code)
+	})
+}
+
+func TestAddDeviceHandlerPOST(t *testing.T) {
 	testCases := []struct {
 		name        string
 		formData    []string
