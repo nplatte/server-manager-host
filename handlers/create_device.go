@@ -38,6 +38,8 @@ func (h *CreateDeviceHandler) POST(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusSeeOther)
 	h.store.AddDevice(deviceName, deviceIP)
+
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }

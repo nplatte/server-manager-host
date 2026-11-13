@@ -29,21 +29,22 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 		formData    []string
 		deviceCount int
 		statusCode  int
+		location    string
 	}{
 		{
 			"Test Handler takes post and makes new device",
 			[]string{"Device Name", "Device IP"},
-			1, http.StatusOK,
+			1, http.StatusSeeOther, "/home",
 		},
 		{
 			"Test handler errors when missing name",
 			[]string{"", "Device IP"},
-			0, http.StatusUnprocessableEntity,
+			0, http.StatusUnprocessableEntity, "",
 		},
 		{
 			"Test handler errors when missing IP",
 			[]string{"Device Name", ""},
-			0, http.StatusUnprocessableEntity,
+			0, http.StatusUnprocessableEntity, "",
 		},
 	}
 	for _, tc := range testCases {
@@ -61,6 +62,7 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 			handler.ServeHTTP(response, request)
 
 			testhelpers.AssertEqual(t, tc.statusCode, response.Code)
+			testhelpers.AssertEqual(t, response.Header().Get("Location"), tc.location)
 			testhelpers.AssertEqual(t, tc.deviceCount, len(store.GetDevices()))
 		})
 	}
