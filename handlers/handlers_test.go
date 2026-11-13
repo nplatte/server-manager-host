@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 
@@ -28,7 +29,11 @@ func TestAddDeviceHandler(t *testing.T) {
 	store := stores.NewMemoryStore()
 	handler := NewCreateDeviceHandler(store)
 	t.Run("Test Handler takes post and makes new device", func(t *testing.T) {
-		request := httptest.NewRequest(http.MethodPost, "/create/device", nil)
+		form := url.Values{}
+		form.Set("name", "Linux PC")
+		form.Set("ip", "IP ADDR")
+		request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
+		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		response := httptest.NewRecorder()
 
 		handler.ServeHTTP(response, request)
