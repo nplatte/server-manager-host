@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
 	"github.com/nplatte/server-manager-host/stores"
 	"github.com/nplatte/server-manager-host/testhelpers"
 )
@@ -22,7 +23,6 @@ func TestHomeHandler(t *testing.T) {
 
 	})
 }
-
 
 func TestAddDeviceHandler(t *testing.T) {
 	store := stores.NewMemoryStore()

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/nplatte/server-manager-host/ui"
 	"github.com/nplatte/server-manager-host/stores"
+	"github.com/nplatte/server-manager-host/ui"
 )
 
 func HandleMain(w http.ResponseWriter, r *http.Request) {
@@ -19,9 +19,9 @@ type CreateDeviceHandler struct {
 }
 
 func NewCreateDeviceHandler(store stores.DeviceStore) (handler *CreateDeviceHandler) {
-	return &CreateDeviceHandler{store:store}
+	return &CreateDeviceHandler{store: store}
 }
 
-func (h *CreateDeviceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request){
-
+func (h *CreateDeviceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
