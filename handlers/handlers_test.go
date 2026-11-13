@@ -42,6 +42,11 @@ func TestAddDeviceHandler(t *testing.T) {
 			[]string{"", "Device IP"},
 			0, http.StatusUnprocessableEntity,
 		},
+		{
+			"Test handler errors when missing IP",
+			[]string{"Device Name", ""},
+			0, http.StatusUnprocessableEntity,
+		},
 	}
 	for _, tc := range testCases {
 		store := stores.NewMemoryStore()
