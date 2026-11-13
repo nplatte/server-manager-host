@@ -26,18 +26,39 @@ func TestHomeHandler(t *testing.T) {
 }
 
 func TestAddDeviceHandler(t *testing.T) {
-	store := stores.NewMemoryStore()
-	handler := NewCreateDeviceHandler(store)
-	t.Run("Test Handler takes post and makes new device", func(t *testing.T) {
-		form := url.Values{}
-		form.Set("name", "Linux PC")
-		form.Set("ip", "IP ADDR")
-		request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
-		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		response := httptest.NewRecorder()
+	testCases := []struct {
+		name        string
+		formData    []string
+		deviceCount int
+		statusCode  int
+	}{
+		{
+			"Test Handler takes post and makes new device",
+			[]string{"Device Name", "Device IP"},
+			1, http.StatusOK,
+		},
+		{
+			"Test handler errors when missing name",
+			[]string{"", "Device IP"},
+			0, http.StatusUnprocessableEntity,
+		},
+	}
+	for _, tc := range testCases {
+		store := stores.NewMemoryStore()
+		handler := NewCreateDeviceHandler(store)
+		t.Run(tc.name, func(t *testing.T) {
+			form := url.Values{}
+			form.Set("name", tc.formData[0])
+			form.Set("ip", tc.formData[1])
 
-		handler.ServeHTTP(response, request)
+			request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
+			request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+			response := httptest.NewRecorder()
 
-		testhelpers.AssertEqual(t, 1, len(store.GetDevices()))
-	})
+			handler.ServeHTTP(response, request)
+
+			testhelpers.AssertEqual(t, tc.statusCode, response.Code)
+			testhelpers.AssertEqual(t, tc.deviceCount, len(store.GetDevices()))
+		})
+	}
 }
