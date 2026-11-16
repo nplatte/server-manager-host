@@ -15,7 +15,6 @@ func NewManagerHostServer() (server *ManagerHostServer) {
 	store := stores.NewMemoryStore()
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
 	server.HandleFunc("/home", handlers.HandleMain)
-	server.Handle("/view/device/all", handlers.NewAllDevicesHandler(store))
 	server.Handle("/create/device", handlers.NewCreateDeviceHandler(store))
 	return
 }

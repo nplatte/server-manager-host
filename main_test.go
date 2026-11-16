@@ -17,7 +17,6 @@ func TestManagerServer(t *testing.T) {
 		url  string
 	}{
 		{"Home Page", server.URL + "/home"},
-		{"View All Devices", server.URL + "/view/device/all"},
 		{"Add New Device", server.URL + "/create/device"},
 	}
 
