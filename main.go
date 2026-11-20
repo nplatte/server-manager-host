@@ -18,7 +18,7 @@ func NewManagerHostServer() (server *ManagerHostServer) {
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
 	server.HandleFunc("/home", handlers.HandleMain)
 	server.Handle("/create/device", handlers.NewCreateDeviceHandler(store, serverCaller))
-	server.Handle("/add/service", handlers.NewCreateDeviceHandler(store, serverCaller))
+	server.Handle("/add/service", handlers.NewAddServiceHandler(store, serverCaller))
 	return
 }
 
