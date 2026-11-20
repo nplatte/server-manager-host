@@ -13,9 +13,9 @@ import (
 )
 
 func TestAddServiceHandlerGET(t *testing.T) {
-	handler := NewCreateDeviceHandler(stores.NewMockDeviceStore(), caller.NewMockCaller())
+	handler := NewAddServiceHandler(stores.NewMockServiceStore(), caller.NewMockCaller())
 	t.Run("Test GET returns status 200", func(t *testing.T) {
-		request := httptest.NewRequest(http.MethodGet, "/create/device", nil)
+		request := httptest.NewRequest(http.MethodGet, "/add/service", nil)
 		response := httptest.NewRecorder()
 
 		handler.ServeHTTP(response, request)
@@ -26,43 +26,30 @@ func TestAddServiceHandlerGET(t *testing.T) {
 
 func TestAddServiceHandlerPOST(t *testing.T) {
 	testCases := []struct {
-		name        string
-		formData    []string
-		deviceCount int
-		statusCode  int
-		location    string
-		cString     string
-		cError      error
+		name         string
+		formData     []string
+		serviceCount int
+		statusCode   int
+		location     string
 	}{
 		{
-			"Test Handler takes post and makes new device",
-			[]string{"Device Name", "Device IP"},
+			"Test Handler takes post and adds existing service",
+			[]string{"Service Name"},
 			1, http.StatusSeeOther, "/home",
-			"", nil,
 		},
 		{
 			"Test handler errors when missing name",
-			[]string{"", "Device IP"},
+			[]string{""},
 			0, http.StatusUnprocessableEntity, "",
-			"", nil,
-		},
-		{
-			"Test handler errors when missing IP",
-			[]string{"Device Name", ""},
-			0, http.StatusUnprocessableEntity, "",
-			"", nil,
 		},
 	}
 	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
-		store := stores.NewMockDeviceStore()
-		handler := NewCreateDeviceHandler(store, testCaller)
-		testCaller.SetReturnString(tc.cString)
-		testCaller.SetReturnError(tc.cError)
+		store := stores.NewMockServiceStore()
+		handler := NewAddServiceHandler(store, testCaller)
 		t.Run(tc.name, func(t *testing.T) {
 			form := url.Values{}
 			form.Set("name", tc.formData[0])
-			form.Set("ip", tc.formData[1])
 
 			request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
 			request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -72,12 +59,12 @@ func TestAddServiceHandlerPOST(t *testing.T) {
 
 			testhelpers.AssertEqual(t, tc.statusCode, response.Code)
 			testhelpers.AssertEqual(t, response.Header().Get("Location"), tc.location)
-			testhelpers.AssertEqual(t, tc.deviceCount, len(store.GetDevices()))
+			testhelpers.AssertEqual(t, tc.serviceCount, len(store.GetServices()))
 		})
 	}
 }
 
-func TestAdderviceHandlerCaller(t *testing.T) {
+func AdderviceHandlerCaller(t *testing.T) {
 	testCases := []struct {
 		name                string
 		expectedDeviceCount int

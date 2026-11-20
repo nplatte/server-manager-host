@@ -23,4 +23,5 @@ func NewAddServiceHandler(store stores.ServiceStore, caller caller.Caller) (hand
 	return &AddServiceHandler{s: store, c: caller}
 }
 
-func (h *AddServiceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {}
+func (h *AddServiceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+}

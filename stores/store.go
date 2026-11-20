@@ -13,6 +13,7 @@ type Device struct {
 
 type ServiceStore interface {
 	AddService(string) error
+	GetServices() []Service
 }
 
 type Service struct {
