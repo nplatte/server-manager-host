@@ -13,7 +13,7 @@ import (
 )
 
 func TestAddDeviceHandlerGET(t *testing.T) {
-	handler := NewCreateDeviceHandler(stores.NewMemoryStore(), caller.NewMockCaller())
+	handler := NewCreateDeviceHandler(stores.NewMockDeviceStore(), caller.NewMockCaller())
 	t.Run("Test GET returns status 200", func(t *testing.T) {
 		request := httptest.NewRequest(http.MethodGet, "/create/device", nil)
 		response := httptest.NewRecorder()
@@ -55,7 +55,7 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 	}
 	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
-		store := stores.NewMemoryStore()
+		store := stores.NewMockDeviceStore()
 		handler := NewCreateDeviceHandler(store, testCaller)
 		testCaller.SetReturnString(tc.cString)
 		testCaller.SetReturnError(tc.cError)
@@ -104,7 +104,7 @@ func TestAddDeviceHandlerCaller(t *testing.T) {
 	}
 	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
-		store := stores.NewMemoryStore()
+		store := stores.NewMockDeviceStore()
 		handler := NewCreateDeviceHandler(store, testCaller)
 		testCaller.SetReturnString(tc.cString)
 		testCaller.SetReturnError(tc.cError)

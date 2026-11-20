@@ -11,7 +11,7 @@ func TestStoreAdd(t *testing.T) {
 		name  string
 		store DeviceStore
 	}{
-		{"In Memory Add", NewMemoryStore()},
+		{"In Memory Add", NewMockDeviceStore()},
 	}
 
 	for _, test := range testCases {
