@@ -13,7 +13,7 @@ import (
 )
 
 func TestAddDeviceHandlerGET(t *testing.T) {
-	handler := NewCreateDeviceHandler(stores.NewMemoryStore())
+	handler := NewCreateDeviceHandler(stores.NewMemoryStore(), caller.NewMockCaller())
 	t.Run("Test GET returns status 200", func(t *testing.T) {
 		request := httptest.NewRequest(http.MethodGet, "/create/device", nil)
 		response := httptest.NewRecorder()

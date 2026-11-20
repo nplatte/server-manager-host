@@ -8,5 +8,5 @@ It then communicates them back to the calling methods and makes sure issues are 
 */
 
 type Caller interface {
-	AddDevice(string) error
+	AddDevice(string) (string, error)
 }

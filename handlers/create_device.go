@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/nplatte/server-manager-host/caller"
 	"github.com/nplatte/server-manager-host/stores"
 )
 
@@ -15,11 +16,12 @@ It also saves the data to the database
 */
 
 type CreateDeviceHandler struct {
-	store stores.DeviceStore
+	store  stores.DeviceStore
+	caller caller.Caller
 }
 
-func NewCreateDeviceHandler(store stores.DeviceStore) (handler *CreateDeviceHandler) {
-	return &CreateDeviceHandler{store: store}
+func NewCreateDeviceHandler(store stores.DeviceStore, caller caller.Caller) (handler *CreateDeviceHandler) {
+	return &CreateDeviceHandler{store: store, caller: caller}
 }
 
 func (h *CreateDeviceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
