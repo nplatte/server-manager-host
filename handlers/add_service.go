@@ -24,4 +24,38 @@ func NewAddServiceHandler(store stores.ServiceStore, caller caller.Caller) (hand
 }
 
 func (h *AddServiceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		h.GET(w, r)
+	case http.MethodPost:
+		h.POST(w, r)
+	default:
+		w.WriteHeader(http.StatusForbidden)
+	}
+}
+
+func (h *AddServiceHandler) GET(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *AddServiceHandler) POST(w http.ResponseWriter, r *http.Request) {
+	serviceName := r.FormValue("name")
+
+	for _, field := range []string{serviceName} {
+		if field == "" {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			return
+		}
+	}
+
+	_, err := h.c.AddService(serviceName)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	w.WriteHeader(http.StatusSeeOther)
+	h.s.AddService(serviceName)
+
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }

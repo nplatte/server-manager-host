@@ -16,4 +16,5 @@ var (
 
 type Caller interface {
 	AddDevice(string) (string, error)
+	AddService(string) (string, error)
 }

@@ -13,6 +13,10 @@ func (c *MockCaller) AddDevice(IP string) (string, error) {
 	return c.returnString, c.returnError
 }
 
+func (c *MockCaller) AddService(IP string) (string, error) {
+	return c.returnString, c.returnError
+}
+
 func (c *MockCaller) SetReturnString(newValue string) {
 	c.returnString = newValue
 }
