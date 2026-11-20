@@ -14,9 +14,11 @@ type ManagerHostServer struct {
 
 func NewManagerHostServer() (server *ManagerHostServer) {
 	store := stores.NewMemoryStore()
+	serverCaller := caller.NewMockCaller()
 	server = &ManagerHostServer{ServeMux: http.NewServeMux()}
 	server.HandleFunc("/home", handlers.HandleMain)
-	server.Handle("/create/device", handlers.NewCreateDeviceHandler(store, caller.NewMockCaller()))
+	server.Handle("/create/device", handlers.NewCreateDeviceHandler(store, serverCaller))
+	server.Handle("/add/service", handlers.NewCreateDeviceHandler(store, serverCaller))
 	return
 }
 

@@ -18,6 +18,7 @@ func TestManagerServer(t *testing.T) {
 	}{
 		{"Home Page", server.URL + "/home"},
 		{"Add New Device", server.URL + "/create/device"},
+		{"Add Existing Service", server.URL + "/add/service"},
 	}
 
 	for _, tc := range testCases {
