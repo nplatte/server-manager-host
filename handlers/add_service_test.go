@@ -64,14 +64,14 @@ func TestAddServiceHandlerPOST(t *testing.T) {
 	}
 }
 
-func AdderviceHandlerCaller(t *testing.T) {
+func TestAddServiceHandlerCaller(t *testing.T) {
 	testCases := []struct {
-		name                string
-		expectedDeviceCount int
-		expectecStatusCode  int
-		location            string
-		cString             string
-		cError              error
+		name                 string
+		expectedServiceCount int
+		expectecStatusCode   int
+		location             string
+		cString              string
+		cError               error
 	}{
 		{
 			"Test Caller returns Success",
@@ -88,19 +88,28 @@ func AdderviceHandlerCaller(t *testing.T) {
 			0, http.StatusOK, "",
 			"", caller.ErrRefused,
 		},
+		{
+			"Test ServiceNotFound",
+			0, http.StatusOK, "",
+			"", caller.ErrServiceNotFound,
+		},
+		{
+			"Test Service Restricted",
+			0, http.StatusOK, "",
+			"", caller.ErrServiceRestricted,
+		},
 	}
 	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
-		store := stores.NewMockDeviceStore()
-		handler := NewCreateDeviceHandler(store, testCaller)
+		store := stores.NewMockServiceStore()
+		handler := NewAddServiceHandler(store, testCaller)
 		testCaller.SetReturnString(tc.cString)
 		testCaller.SetReturnError(tc.cError)
 		t.Run(tc.name, func(t *testing.T) {
 			form := url.Values{}
-			form.Set("name", "Device Name")
-			form.Set("ip", "Device IP")
+			form.Set("name", "Service Name")
 
-			request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
+			request := httptest.NewRequest(http.MethodPost, "/add/service", strings.NewReader(form.Encode()))
 			request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 			response := httptest.NewRecorder()
 
@@ -108,7 +117,7 @@ func AdderviceHandlerCaller(t *testing.T) {
 
 			testhelpers.AssertEqual(t, tc.expectecStatusCode, response.Code)
 			testhelpers.AssertEqual(t, response.Header().Get("Location"), tc.location)
-			testhelpers.AssertEqual(t, tc.expectedDeviceCount, len(store.GetDevices()))
+			testhelpers.AssertEqual(t, tc.expectedServiceCount, len(store.GetServices()))
 		})
 	}
 }
