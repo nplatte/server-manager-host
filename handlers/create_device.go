@@ -6,6 +6,14 @@ import (
 	"github.com/nplatte/server-manager-host/stores"
 )
 
+/*
+
+The Create Device Handler is the Handler that is responsible for adding a device to the service listed.
+It tells the caller to add the device to it's open connections
+It also saves the data to the database
+
+*/
+
 type CreateDeviceHandler struct {
 	store stores.DeviceStore
 }

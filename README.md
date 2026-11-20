@@ -41,5 +41,10 @@ It will need:
 This is a form that takes a device name and a service name, communicates with the device, and adds the service file to the server
 It will have:
 
-
+Caller
+It can:
+    1. Call clients and request them to do things
+    2. Format information into calls that are appropriate
+    3. Return the information that is forwarded by the client
+    4. Handle any errors in the call, handle 
 

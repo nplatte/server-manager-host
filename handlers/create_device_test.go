@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nplatte/server-manager-host/caller"
 	"github.com/nplatte/server-manager-host/stores"
 	"github.com/nplatte/server-manager-host/testhelpers"
 )
@@ -47,9 +48,10 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 			0, http.StatusUnprocessableEntity, "",
 		},
 	}
+	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
 		store := stores.NewMemoryStore()
-		handler := NewCreateDeviceHandler(store)
+		handler := NewCreateDeviceHandler(store, testCaller)
 		t.Run(tc.name, func(t *testing.T) {
 			form := url.Values{}
 			form.Set("name", tc.formData[0])
