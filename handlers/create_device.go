@@ -42,14 +42,26 @@ func (h *CreateDeviceHandler) GET(w http.ResponseWriter, r *http.Request) {
 func (h *CreateDeviceHandler) POST(w http.ResponseWriter, r *http.Request) {
 	deviceName := r.FormValue("name")
 	deviceIP := r.FormValue("ip")
+
 	for _, field := range []string{deviceName, deviceIP} {
 		if field == "" {
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
 	}
+
+	_, err := h.caller.AddDevice(deviceIP)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	w.WriteHeader(http.StatusSeeOther)
 	h.store.AddDevice(deviceName, deviceIP)
 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
+}
+
+func (h *CreateDeviceHandler) ValidateForm() {
+
 }

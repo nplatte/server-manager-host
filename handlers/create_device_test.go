@@ -31,27 +31,34 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 		deviceCount int
 		statusCode  int
 		location    string
+		cString     string
+		cError      error
 	}{
 		{
 			"Test Handler takes post and makes new device",
 			[]string{"Device Name", "Device IP"},
 			1, http.StatusSeeOther, "/home",
+			"", nil,
 		},
 		{
 			"Test handler errors when missing name",
 			[]string{"", "Device IP"},
 			0, http.StatusUnprocessableEntity, "",
+			"", nil,
 		},
 		{
 			"Test handler errors when missing IP",
 			[]string{"Device Name", ""},
 			0, http.StatusUnprocessableEntity, "",
+			"", nil,
 		},
 	}
 	testCaller := caller.NewMockCaller()
 	for _, tc := range testCases {
 		store := stores.NewMemoryStore()
 		handler := NewCreateDeviceHandler(store, testCaller)
+		testCaller.SetReturnString(tc.cString)
+		testCaller.SetReturnError(tc.cError)
 		t.Run(tc.name, func(t *testing.T) {
 			form := url.Values{}
 			form.Set("name", tc.formData[0])
@@ -66,6 +73,55 @@ func TestAddDeviceHandlerPOST(t *testing.T) {
 			testhelpers.AssertEqual(t, tc.statusCode, response.Code)
 			testhelpers.AssertEqual(t, response.Header().Get("Location"), tc.location)
 			testhelpers.AssertEqual(t, tc.deviceCount, len(store.GetDevices()))
+		})
+	}
+}
+
+func TestAddDeviceHandlerCaller(t *testing.T) {
+	testCases := []struct {
+		name                string
+		expectedDeviceCount int
+		expectecStatusCode  int
+		location            string
+		cString             string
+		cError              error
+	}{
+		{
+			"Test Caller returns Success",
+			1, http.StatusSeeOther, "/home",
+			"", nil,
+		},
+		{
+			"Test Caller Can't Reach Device",
+			0, http.StatusOK, "",
+			"", caller.ErrUnreacable,
+		},
+		{
+			"Test Caller got ConnRefused",
+			0, http.StatusOK, "",
+			"", caller.ErrRefused,
+		},
+	}
+	testCaller := caller.NewMockCaller()
+	for _, tc := range testCases {
+		store := stores.NewMemoryStore()
+		handler := NewCreateDeviceHandler(store, testCaller)
+		testCaller.SetReturnString(tc.cString)
+		testCaller.SetReturnError(tc.cError)
+		t.Run(tc.name, func(t *testing.T) {
+			form := url.Values{}
+			form.Set("name", "Device Name")
+			form.Set("ip", "Device IP")
+
+			request := httptest.NewRequest(http.MethodPost, "/create/device", strings.NewReader(form.Encode()))
+			request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+			response := httptest.NewRecorder()
+
+			handler.ServeHTTP(response, request)
+
+			testhelpers.AssertEqual(t, tc.expectecStatusCode, response.Code)
+			testhelpers.AssertEqual(t, response.Header().Get("Location"), tc.location)
+			testhelpers.AssertEqual(t, tc.expectedDeviceCount, len(store.GetDevices()))
 		})
 	}
 }
