@@ -61,7 +61,3 @@ func (h *CreateDeviceHandler) POST(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
-
-func (h *CreateDeviceHandler) ValidateForm() {
-
-}
